@@ -115,44 +115,100 @@ class LinkedList {
 }
 
 function display(ll){
-  let result = []
-  let currentNode = ll.head
+  let result = [];
+  let currentNode = ll.head;
   while(currentNode !== null){
-    result.push(currentNode.value)
-    currentNode = currentNode.next
+    result.push(currentNode.value);
+    currentNode = currentNode.next;
   }
-  return result
+  return result;
 }
 
 function size(ll){
-  return display(ll).length
+  return display(ll).length;
 }
 
 function isEmpty(ll){
-  return ll.head === null
+  return ll.head === null;
 }
 
 function findPrevious(ll, item){
-let currentNode = ll.head
-
-while(currentNode !== null){
-  if(currentNode.next !== null && currentNode.next.value === item){
-    return currentNode
+  let currentNode = ll.head;
+  while(currentNode !== null){
+    if(currentNode.next !== null && currentNode.next.value === item){
+      return currentNode;
+    }
+    currentNode = currentNode.next;
   }
-  currentNode = currentNode.next
-}
-console.log('Item not found')
-return null
+  console.log('Item not found');
+  return null;
 }
 
 function findLast(ll){
-  let currentNode = ll.head
+  let currentNode = ll.head;
 
   while(currentNode.next !== null){
-    currentNode = currentNode.next
+    currentNode = currentNode.next;
   }
 
-  return currentNode
+  return currentNode;
+}
+
+function reverseList(ll) {
+  let newHead = findLast(ll);// 3 -> null
+  let newHeadVal = newHead.value;
+  let lastNode = newHead; // 3 -> null
+  //l lastNode = 3 -> null
+  let counter = size(ll);
+  while (counter > 1) {
+    lastNode.next = findPrevious(ll, lastNode.value); // 2 -> 3 -> 2
+    lastNode = lastNode.next; //
+    counter --;
+  }
+  lastNode.next = null;
+  ll.head = newHead;
+  return ll;
+}
+
+function findThirdFromEnd(ll) {
+  let counter = 0;
+  let lastNode = findLast(ll);
+  while (counter < 2) {
+    lastNode = findPrevious(ll, lastNode.value);
+    counter++;
+  }
+  return lastNode;
+}
+
+function findMiddleOfList(ll) {
+  if (ll.head === null) {
+    return null;
+  }
+  let a = ll.head;
+  let b;
+  if (size(ll) % 2 === 0) {
+    b = findPrevious(ll, findLast(ll).value);
+  } else {
+    b = findLast(ll);
+  }
+  while (a !== b) {
+    a = a.next;
+    b = findPrevious(ll, b.value);
+  }
+  return a;
+}
+
+function checkCycle(ll) {
+  let previouseNodes = [];
+  let currentNode = ll.head;
+  while(currentNode.next !== null) {
+    if (previouseNodes.includes(currentNode.next)) {
+      return true;
+    }
+    previouseNodes.push(currentNode);
+    currentNode = currentNode.next;
+  }
+  return false;
 }
 
 function main(){
@@ -169,14 +225,26 @@ function main(){
   SLL.insertAt('Kat', 3);
   SLL.remove('Tauhida');
   // console.log(SLL.find('Tauhida'));
-
+  
   // console.log(SLL);
+  let cycleList = new LinkedList();
+  cycleList.insertFirst('third');
+  cycleList.insertFirst('second');
+  cycleList.insertFirst('first');
+  let fourthNode = new _Node('fourth', findLast(cycleList));
+  cycleList.find('third').next = fourthNode;
 
-  console.log(display(SLL))
-  console.log(size(SLL))
-  console.log(isEmpty(SLL))
-  console.log(findPrevious(SLL, 'Helo'))
-  console.log(findLast(SLL))
+  console.log(display(SLL));
+  // console.log(size(SLL));
+  // console.log(isEmpty(SLL));
+  // console.log(findPrevious(SLL, 'Helo'));
+  // console.log(findLast(SLL));
+  // reverseList(SLL);
+  // console.log(display(SLL));
+  // console.log(findThirdFromEnd(SLL));
+  // console.log(findMiddleOfList(SLL));
+  // console.log(display(cycleList));
+  console.log(checkCycle(cycleList));
 }
 
 main();
@@ -185,17 +253,35 @@ main();
 // The function gets rid of duplicates
 // O(n^2)
 
-//5. Reverse a list
+class _DoubleLinkNode {
+  constructor(value, previous, next) {
+    this.value = value;
+    this.previous = previous;
+    this.next = next;
+  }
+}
 
-//use findLast to find the last Node 
-//lastNode.next = findPrevious(ll, LastNode)
-// lastNode = findPrevious(ll, LastNode)
+class DoublyLinkedList {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+  }
 
-let lastNode = findLast(SLL)
-lastNode.next = findPrevious(ll, LastNode.value)
-lastNode = findPrevious(ll, LastNode.value)
+  insertFirst(item) {
+    if (this.head === null) {
+      this.head = new _DoubleLinkNode(item, this.tail);
+    } else {
+      this.head = new _DoubleLinkNode(item, this.head);
+    }
+  }
 
-// 1 -> 2 -> 3
-// 1 -> 2 -> 3 -> 2
-// 1 -> 2 -> 1 3 -> 2
+  insertLast(item) {
+    if (this.head === null) {
+      this.insertFirst(item);
+    } else {
+      this.tail = new _DoubleLinkNode(item, null);
+    }
+  }
+}
 
+// 3rd -> 2nd -> 1st -> tail(null)
