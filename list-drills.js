@@ -34,7 +34,7 @@ class LinkedList {
       this.insertFirst(item); //How do we want to handle these cases?
     } else {
       let tempNode = this.head;
-      while (tempNode.next.value !== insertPt){ //tempNode -> newNode -> insertPt
+      while (tempNode.next.value !== insertPt && tempNode.next !== null){ //tempNode -> newNode -> insertPt
         tempNode = tempNode.next;
       }
       let newNode = new _Node(item, tempNode.next);
@@ -48,7 +48,7 @@ class LinkedList {
     }
     else{
       let tempNode = this.head;
-      while(tempNode.value !== insertPt){
+      while(tempNode.value !== insertPt && tempNode.next !== null){
         tempNode = tempNode.next;
       }
       let newNode = new _Node(item, tempNode.next);
@@ -66,7 +66,7 @@ class LinkedList {
       tempNode = tempNode.next;
       counter+= 1;
     }
-    this.insertBefore(item, tempNode);
+    this.insertBefore(item, tempNode.value);
   }
 
   // node1, node2,  node3, node3
@@ -114,6 +114,47 @@ class LinkedList {
 
 }
 
+function display(ll){
+  let result = []
+  let currentNode = ll.head
+  while(currentNode !== null){
+    result.push(currentNode.value)
+    currentNode = currentNode.next
+  }
+  return result
+}
+
+function size(ll){
+  return display(ll).length
+}
+
+function isEmpty(ll){
+  return ll.head === null
+}
+
+function findPrevious(ll, item){
+let currentNode = ll.head
+
+while(currentNode !== null){
+  if(currentNode.next !== null && currentNode.next.value === item){
+    return currentNode
+  }
+  currentNode = currentNode.next
+}
+console.log('Item not found')
+return null
+}
+
+function findLast(ll){
+  let currentNode = ll.head
+
+  while(currentNode.next !== null){
+    currentNode = currentNode.next
+  }
+
+  return currentNode
+}
+
 function main(){
   let SLL = new LinkedList();
   SLL.insertFirst('Apollo');
@@ -126,11 +167,35 @@ function main(){
   SLL.insertBefore('Athena', 'Boomer');
   SLL.insertAfter('HotDog', 'Helo');
   SLL.insertAt('Kat', 3);
-  // console.log(SLL.find('Tauhida'));
   SLL.remove('Tauhida');
   // console.log(SLL.find('Tauhida'));
 
-  console.log(SLL);
+  // console.log(SLL);
+
+  console.log(display(SLL))
+  console.log(size(SLL))
+  console.log(isEmpty(SLL))
+  console.log(findPrevious(SLL, 'Helo'))
+  console.log(findLast(SLL))
 }
 
 main();
+
+//4. Mystery Program
+// The function gets rid of duplicates
+// O(n^2)
+
+//5. Reverse a list
+
+//use findLast to find the last Node 
+//lastNode.next = findPrevious(ll, LastNode)
+// lastNode = findPrevious(ll, LastNode)
+
+let lastNode = findLast(SLL)
+lastNode.next = findPrevious(ll, LastNode.value)
+lastNode = findPrevious(ll, LastNode.value)
+
+// 1 -> 2 -> 3
+// 1 -> 2 -> 3 -> 2
+// 1 -> 2 -> 1 3 -> 2
+
