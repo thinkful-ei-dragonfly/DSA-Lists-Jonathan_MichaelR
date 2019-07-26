@@ -253,35 +253,6 @@ main();
 // The function gets rid of duplicates
 // O(n^2)
 
-class _DoubleLinkNode {
-  constructor(value, previous, next) {
-    this.value = value;
-    this.previous = previous;
-    this.next = next;
-  }
-}
 
-class DoublyLinkedList {
-  constructor() {
-    this.head = null;
-    this.tail = null;
-  }
-
-  insertFirst(item) {
-    if (this.head === null) {
-      this.head = new _DoubleLinkNode(item, this.tail);
-    } else {
-      this.head = new _DoubleLinkNode(item, this.head);
-    }
-  }
-
-  insertLast(item) {
-    if (this.head === null) {
-      this.insertFirst(item);
-    } else {
-      this.tail = new _DoubleLinkNode(item, null);
-    }
-  }
-}
 
 // 3rd -> 2nd -> 1st -> tail(null)
